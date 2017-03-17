@@ -8,22 +8,34 @@ public class Bubble {
     double radius;
     double area;
     Vector velocity;
-    
+
     public Bubble(double x, double y, double radius, double area){
         this.position = new Point(x, y);
         this.radius = radius;
         this.area = area;
         this.velocity = new Vector(0,0);
     }
-    
+
+	public Point getPosition (){
+		return this.position;
+	}
+
+	public Vector getVelocity (){
+		return this.velocity;
+	}
+
     public void setVelocity (double x, double y){
         this.velocity = new Vector(x, y);
     }
-    
+
+	public void setVelocity (Vector vel){
+		this.velocity = vel;
+	}
+
     public void moveBubble (Vector v){
         this.position = this.position.plus(v);
     }
-    
+
     public void relocateBubble (Point p){
         this.position = p;
     }
