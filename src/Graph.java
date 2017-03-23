@@ -13,12 +13,12 @@ public class Graph {
  
     public void  findIntersecions(){
         for (int i=0 ; i < bubbles.size(); i++){
-//           bubbles.get(i).intersections = bubbleIntersections(i); 
+           bubbles.get(i).intersections = bubbleIntersections(i); 
         }
     }
     
-    public ArrayList<Pair<Bubble, Line>> bubbleIntersections(int b){
-        ArrayList<Pair<Bubble, Line>> result = new ArrayList<>();
+    public ArrayList<Intersection> bubbleIntersections(int b){
+        ArrayList<Intersection> result = new ArrayList<>();
         Bubble b1,b2;
         b1= bubbles.get(b);
         for (int i=0; i < bubbles.size(); i++){

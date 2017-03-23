@@ -9,7 +9,7 @@ public class Bubble {
     double radius;
     double area;
     Vector velocity;
-    //ArrayList<Pair<Bubble, Line, >> intersections;
+    ArrayList<Intersection> intersections;
     
 
     public Bubble(double x, double y, double radius, double area){
@@ -17,7 +17,7 @@ public class Bubble {
         this.radius = radius;
         this.area = area;
         this.velocity = new Vector(0,0);
-        //this.intersections = new ArrayList<>();
+        this.intersections = new ArrayList<>();
     }
 
 	public Point getPosition (){
