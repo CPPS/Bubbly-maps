@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import utility.*;
 /**
  *
@@ -8,12 +9,14 @@ public class Bubble {
     double radius;
     double area;
     Vector velocity;
+    ArrayList<Pair<Bubble, Line>> intersections;
     
     public Bubble(double x, double y, double radius, double area){
         this.position = new Point(x, y);
         this.radius = radius;
         this.area = area;
         this.velocity = new Vector(0,0);
+        this.intersections = new ArrayList<>();
     }
     
     public void setVelocity (double x, double y){

@@ -5,9 +5,9 @@ import static java.lang.Math.*;
  * @author Pantea
  */
 public class Vector{
-    double x;
-    double y;
-    
+    private double x;
+    private double y;
+    private final double EPS = 0.000001;
     public Vector(double x, double y) {        
         this.x = x;
         this.y = y;
@@ -31,5 +31,25 @@ public class Vector{
     
     public Vector minus (Vector v){
         return new Vector (this.x - v.x, this.y - v.y);
+    }
+    
+    public void normalize(){
+        double length = this.getLength();
+        this.x /= length;
+        this.y /= length;
+    }
+    
+    public double getX(){
+        return this.x;
+    }
+    
+    public double getY(){
+        return this.y;
+    }
+    
+    @Override
+    public boolean equals(Object o){
+        Vector v = (Vector)o;
+        return (Math.abs(v.getX()-this.x) <= EPS) && (Math.abs(v.getY()-this.y)<= EPS);
     }
 }
