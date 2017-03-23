@@ -1,14 +1,13 @@
-
 import java.util.ArrayList;
 
-
-
-/**
- *
- * @author Pantea
- */
 public class Map {
-    ArrayList bubbles;
-    int nrBubbles;
-    
+    private Graph environment;
+
+	public Map(Graph environment) {
+		this.environment = environment;
+	}
+
+	public Graph getEnvironment() {
+		return environment;
+	}
 }

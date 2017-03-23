@@ -1,6 +1,5 @@
-
 import static java.lang.Math.*;
-import java.util.ArrayList;
+import java.util.*;
 import utility.*;
 
 
@@ -14,7 +13,7 @@ public class Graph {
  
     public void  findIntersecions(){
         for (int i=0 ; i < bubbles.size(); i++){
-           bubbles.get(i).intersections = bubbleIntersections(i); 
+//           bubbles.get(i).intersections = bubbleIntersections(i); 
         }
     }
     
@@ -47,4 +46,9 @@ public class Graph {
         double h = sqrt(pow(r1,2) - pow(a,2));
         return new Pair(null, null);
     }
+
+	public List<Bubble> getBubbles() {
+		return bubbles;
+	}
+
 }
