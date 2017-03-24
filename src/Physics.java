@@ -20,8 +20,8 @@ public class Physics extends Thread {
     }
     
     public void requestStart() {
-        if (running) shouldPause = false;
-        else run();
+        shouldPause = false;
+        if (!running) run();
     }
     
     Iterator<Double> dbl = new Random(0).doubles().iterator();
