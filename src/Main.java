@@ -12,28 +12,33 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) {
-        
         new Main().run();
     }
     
-    public final long PreferredFPS = 60; // 1 to 1000
+    public final long preferredFPS = 60; // 1 to 1000
     
     public Framework framework;
     public JFrame window;
     public Canvas canvas;
     
+    public Physics physics;
     public List<Bubble> bubbles;
+    
     public Environment environment;
     public Ticker ticker;
     
     public void run() {
         bubbles = getRandomBubbles();
 //        bubbles = getInputBubbles(System.in);
+        
+        long preferredInterval = 
+                preferredFPS > 0 && preferredFPS <= 1000 
+                    ? 1000L / preferredFPS 
+                    : 1L;
         
         EventQueue.invokeLater(() -> {
             framework = new Framework();
@@ -56,7 +61,10 @@ public class Main {
                 public void run() {
                     canvas.repaint();
                 }
-            }, 0L, PreferredFPS > 0 ? 1000L / PreferredFPS : 1L);
+            }, 0L, preferredInterval);
+            
+            physics = new Physics(bubbles);
+            physics.start();
         });
     }
     

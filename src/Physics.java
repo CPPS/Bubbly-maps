@@ -1,31 +1,43 @@
+import java.util.Iterator;
 import java.util.List;
-import utility.Vector;
+import java.util.Random;
 
-public class Physics {
-    public static void singlePass(Map map) {
-//        Graph environment = map.getEnvironment();
-//        List<Bubble> bubbles = environment.getBubbles();
-//        List<Edge> edges = environment.getEdges();
-//
-//        for (Bubble bubble : bubbles) {
-//            bubble.setVelocity(0.0, 0.0);
-//        }
-//
-//        for (Edge edge : edges) {
-//            double distance = edge.getDistance();
-//            double length = edge.getLength();
-//            double delta = length - distance;
-//
-//            for (int i = 0; i < 2; i++) {
-//                Bubble bubble = edge.get(i);
-//                Vector difference = edge.other(bubble).getPosition().makeVector(bubble.getPosition());
-//                bubble.setVelocity(bubble.getVelocity().plus(difference.scale(0.001 * delta)));
-//            }
-//        }
-//
-//        for (Bubble bubble : bubbles) {
-//            bubble.moveBubble(bubble.getVelocity());
-//            bubble.setVelocity(0.0, 0.0);
-//        }
+public class Physics extends Thread {
+    private List<Bubble> bubbles;
+    
+    private boolean running;
+    private boolean shouldPause;
+    
+    public Physics(List<Bubble> bubbles) {
+        this.bubbles = bubbles;
+        
+        running = false;
+        shouldPause = false;
+    }
+    
+    public void requestPause() {
+        shouldPause = true;
+    }
+    
+    public void requestStart() {
+        if (running) shouldPause = false;
+        else run();
+    }
+    
+    Iterator<Double> dbl = new Random(0).doubles().iterator();
+        
+    @Override
+    public void run() {
+        running = true;
+        
+        while (!shouldPause)
+            singlePass();
+        
+        running = false;
+    }
+    
+    public void singlePass() {
+        for (int i = 0; i < 10; i++)
+            bubbles.get(i).moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1));
     }
 }
