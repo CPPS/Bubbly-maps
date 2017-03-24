@@ -37,7 +37,7 @@ public class Physics extends Thread {
     }
     
     public void singlePass() {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < bubbles.size(); i++)
             bubbles.get(i).moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1));
     }
 }
