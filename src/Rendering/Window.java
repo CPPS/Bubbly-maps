@@ -1,4 +1,4 @@
-package Rendering;
+package rendering;
 
 import java.awt.Dimension;
 import java.awt.event.*;

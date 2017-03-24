@@ -1,4 +1,4 @@
-package Rendering;
+package rendering;
 
 import java.awt.Color;
 import java.awt.Dimension;
