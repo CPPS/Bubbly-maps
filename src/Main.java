@@ -1,4 +1,13 @@
-
+import java.awt.EventQueue;
+import Rendering.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.TimerTask;
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,27 +16,73 @@ import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
 public class Main {
-
-    private static InputReader in;
-    private static PrintWriter out;
-    private static double distances[][];
-    
-    public static void main(String args[]) {
-        in = new InputReader(System.in);
-        out = new PrintWriter(System.out);
-        Main m = new Main();
-        m.getInput();
+    public static void main(String[] args) {
+        
+        new Main().run();
     }
     
-    void getInput(){
+    public final long PreferredFPS = 60; // 1 to 1000
+    
+    public Framework framework;
+    public JFrame window;
+    public Canvas canvas;
+    
+    public List<Bubble> bubbles;
+    public Environment environment;
+    public Ticker ticker;
+    
+    public void run() {
+        bubbles = getRandomBubbles();
+//        bubbles = getInputBubbles(System.in);
+        
+        EventQueue.invokeLater(() -> {
+            framework = new Framework();
+            window = framework.createWindow(true);
+            canvas = new Canvas();
+            
+            environment = new Environment(new ArrayList<>(bubbles));
+            ticker = new Ticker();
+            
+            canvas.addLayer(0, environment);
+            canvas.addLayer(2, ticker);
+            
+            window.setContentPane(canvas);
+            window.validate();
+            window.repaint();
+            
+            java.util.Timer timer = new java.util.Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    canvas.repaint();
+                }
+            }, 0L, PreferredFPS > 0 ? 1000L / PreferredFPS : 1L);
+        });
+    }
+    
+    public List<Bubble> getRandomBubbles() {
+        List<Bubble> result = new ArrayList<>();
+        Random r = new Random(0);
+        Iterator<Double> dbl = r.doubles().iterator();
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        for (int i = 0; i < 10; i++)
+            result.add(new Bubble(screen.width * dbl.next(), screen.height * dbl.next(), 100 * dbl.next(), 200 * dbl.next()));
+        
+        return result;
+    }
+    
+    public List<Bubble> getInputBubbles(InputStream stream) {
+        InputReader in = new InputReader(stream);
+        List<Bubble> result = new ArrayList<>();
         int size = in.nextInt();
         
-        for (int i = 0; i < size; i++){
-            for (int j=0; j < size; j++){
-                distances[i][j]= in.nextDouble();
-            }
-        }
+        for (int i = 0; i < size; i++)
+            result.add(new Bubble(in.nextDouble(), in.nextDouble(), in.nextDouble(), in.nextDouble()));
+        
+        return result;
     }
+    
     static class InputReader {
         public BufferedReader reader;
         public StringTokenizer tokenizer;
@@ -53,7 +108,7 @@ public class Main {
         }
 
         public long nextLong() {
-            return Long.parseLong (next());
+            return Long.parseLong(next());
         }
 
         public double nextDouble() {
