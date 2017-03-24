@@ -32,7 +32,7 @@ public class Main {
     public Ticker ticker;
     
     public void run() {
-        bubbles = getRandomBubbles();
+        bubbles = getRandomBubbles(10);
 //        bubbles = getInputBubbles(System.in);
         
         long preferredInterval = 
@@ -68,13 +68,13 @@ public class Main {
         });
     }
     
-    public List<Bubble> getRandomBubbles() {
+    public List<Bubble> getRandomBubbles(int nr) {
         List<Bubble> result = new ArrayList<>();
         Random r = new Random(0);
         Iterator<Double> dbl = r.doubles().iterator();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < nr; i++)
             result.add(new Bubble(screen.width * dbl.next(), screen.height * dbl.next(), 100 * dbl.next(), 200 * dbl.next()));
         
         return result;
