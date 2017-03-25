@@ -7,6 +7,7 @@ public class Physics extends Thread {
     
     private boolean running;
     private boolean shouldPause;
+    private Runnable onTick;
     
     public Physics(List<Bubble> bubbles) {
         this.bubbles = bubbles;
@@ -30,8 +31,10 @@ public class Physics extends Thread {
     public void run() {
         running = true;
         
-        while (!shouldPause)
+        while (!shouldPause) {
             singlePass();
+            onTick.run();
+        }
         
         running = false;
     }
@@ -39,5 +42,9 @@ public class Physics extends Thread {
     public void singlePass() {
         for (int i = 0; i < bubbles.size(); i++)
             bubbles.get(i).moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1));
+    }
+    
+    public void onTick(Runnable onTick) {
+        this.onTick = onTick;
     }
 }
