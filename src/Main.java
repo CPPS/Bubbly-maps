@@ -32,6 +32,7 @@ public class Main {
     
     public Environment environment;
     public Ticker tickerFPS;
+    public Ticker tickerCPF;
     
     public void run() {
         bubbles = getRandomBubbles(10);
@@ -53,8 +54,13 @@ public class Main {
             origin = new Point(0, 0);
             tickerFPS = new Ticker(origin, "frame", "delta", "count", "time", "FPS");
             
+            Rectangle bounds = tickerFPS.getDisplayBounds();
+            origin = new Point(bounds.x, bounds.y + bounds.height);
+            tickerCPF = new Ticker(origin, "tick", "delta", "count", "time", "CPF");
+            
             canvas.addLayer(0, environment);
             canvas.addLayer(2, tickerFPS);
+            canvas.addLayer(2, tickerCPF);
             
             window.setContentPane(canvas);
             window.validate();
@@ -65,6 +71,7 @@ public class Main {
                 @Override
                 public void run() {
                     tickerFPS.count();
+                    tickerCPF.interval();
                     canvas.repaint();
                 }
             }, 0L, preferredInterval);
@@ -76,6 +83,9 @@ public class Main {
             }, 0L, 1000L);
             
             physics = new Physics(bubbles);
+            physics.onTick(() -> {
+                tickerCPF.count();
+            });
             physics.start();
         });
     }
