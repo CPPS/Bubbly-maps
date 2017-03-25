@@ -46,7 +46,7 @@ public class Main {
             canvas = new Canvas();
             
             environment = new Environment(new ArrayList<>(bubbles));
-            ticker = new Ticker();
+            ticker = new Ticker("frame", "delta", "count", "time", "FPS");
             
             canvas.addLayer(0, environment);
             canvas.addLayer(2, ticker);
@@ -59,9 +59,16 @@ public class Main {
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
+                    ticker.count();
                     canvas.repaint();
                 }
             }, 0L, preferredInterval);
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    ticker.interval();
+                }
+            }, 0L, 1000L);
             
             physics = new Physics(bubbles);
             physics.start();
