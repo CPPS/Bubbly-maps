@@ -25,6 +25,9 @@ public class Ticker extends JComponent {
     public final int GRAPHWIDTH = 200;
     public final int GRAPHHEIGHT = 80;
     
+    private boolean paused = false;
+    private long timePaused = 0;
+    
     private long counter = 0;
     private long timeAtStart = 0;
     
@@ -77,7 +80,7 @@ public class Ticker extends JComponent {
            return d / 1000000L + "ms (" + (d > 0 ? (1000000000L / d) : "Infinite") + " " + unit + ")";
         }));
         table.put("time", new TableEntry(TIME, time, () -> {
-            long t = (long)(System.nanoTime() - timeAtStart);
+            long t = (long)((paused ? timePaused : System.nanoTime()) - timeAtStart);
             long ns = (t) % 1000000;
             long ms = (t /= 1000000) % 1000;
             long s = (t /= 1000) % 60;
@@ -127,6 +130,19 @@ public class Ticker extends JComponent {
     
     public void display(int options) {
         display = options;
+    }
+    
+    public void pause() {
+        paused = true;
+        timePaused = System.nanoTime();
+    }
+    
+    public void resume() {
+        paused = false;
+        long deltaPaused = System.nanoTime() - timePaused;
+        
+        timeAtStart += deltaPaused;
+        timeLastCounted += deltaPaused;
     }
     
     @Override 
