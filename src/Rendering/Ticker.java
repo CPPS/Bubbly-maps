@@ -90,7 +90,8 @@ public class Ticker extends JComponent {
                 (h > 0 ? h + ":" : "") +
                 (m > 0 ? m + ":" : "") +
                 (s > 0 ? s + "'" : "") +
-                String.format("%3s\"",ms).replace(' ','0');
+                String.format("%3s\"",ms).replace(' ','0') + 
+                String.format("%6s",ns).replace(' ','0');
         }));
         table.put("lintv", new TableEntry(LINTV, lintv, () -> {
             return intervals.getLast() + " " + unit;
