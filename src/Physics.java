@@ -1,8 +1,12 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class Physics extends Thread {
     private List<Bubble> bubbles;
@@ -102,5 +106,36 @@ public class Physics extends Thread {
     
     public void onResume(Runnable onResume) {
         this.onResume = onResume;
+    }
+    
+    JMenu menu;
+    public JMenu getMenu() {
+        if (menu == null) {
+            menu = new JMenu("Physics");
+            menu.setMnemonic(KeyEvent.VK_P);
+            JMenuItem item;
+
+            item = new JMenuItem("Pause");
+            item.setMnemonic(KeyEvent.VK_P);
+            item.addActionListener((ActionEvent e) -> {
+                requestPause();
+            });
+            menu.add(item);
+
+            item = new JMenuItem("Resume");
+            item.setMnemonic(KeyEvent.VK_R);
+            item.addActionListener((ActionEvent e) -> {
+                requestResume();
+            });
+            menu.add(item);
+
+            item = new JMenuItem("Single run");
+            item.setMnemonic(KeyEvent.VK_O);
+            item.addActionListener((ActionEvent e) -> {
+                requestSingleRun();
+            });
+            menu.add(item);
+        }
+        return menu;
     }
 }

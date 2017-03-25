@@ -78,7 +78,9 @@ public class Main {
                 tickerCPF.resume();
             });
             physics.start();
-            physics.requestPause();
+
+            JMenu menu = physics.getMenu();
+            window.getJMenuBar().add(menu);
             
             java.util.Timer timer = new java.util.Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
@@ -93,7 +95,6 @@ public class Main {
                 @Override
                 public void run() {
                     tickerFPS.interval();
-                    physics.requestSingleRun();
                 }
             }, 0L, 1000L);
         });
