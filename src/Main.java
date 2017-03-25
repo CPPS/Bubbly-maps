@@ -1,6 +1,8 @@
 import java.awt.EventQueue;
 import rendering.*;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,7 +31,7 @@ public class Main {
     public List<Bubble> bubbles;
     
     public Environment environment;
-    public Ticker ticker;
+    public Ticker tickerFPS;
     
     public void run() {
         bubbles = getRandomBubbles(10);
@@ -46,10 +48,13 @@ public class Main {
             canvas = new Canvas();
             
             environment = new Environment(new ArrayList<>(bubbles));
-            ticker = new Ticker("frame", "delta", "count", "time", "FPS");
+            
+            Point origin;
+            origin = new Point(0, 0);
+            tickerFPS = new Ticker(origin, "frame", "delta", "count", "time", "FPS");
             
             canvas.addLayer(0, environment);
-            canvas.addLayer(2, ticker);
+            canvas.addLayer(2, tickerFPS);
             
             window.setContentPane(canvas);
             window.validate();
@@ -59,14 +64,14 @@ public class Main {
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    ticker.count();
+                    tickerFPS.count();
                     canvas.repaint();
                 }
             }, 0L, preferredInterval);
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    ticker.interval();
+                    tickerFPS.interval();
                 }
             }, 0L, 1000L);
             
