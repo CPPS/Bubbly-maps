@@ -57,6 +57,7 @@ public class Main {
             Rectangle bounds = tickerFPS.getDisplayBounds();
             origin = new Point(bounds.x, bounds.y + bounds.height);
             tickerCPF = new Ticker(origin, "tick", "delta", "count", "time", "CPF");
+            tickerCPF.setResolution(120);
             
             canvas.addLayer(1, tickerCPF);
             canvas.addLayer(1, tickerFPS);
