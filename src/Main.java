@@ -67,6 +67,18 @@ public class Main {
             window.validate();
             window.repaint();
             
+            physics = new Physics(bubbles);
+            physics.onTick(() -> {
+                tickerCPF.count();
+            });
+            physics.onPause(() -> {
+                tickerCPF.pause();
+            });
+            physics.onResume(() -> {
+                tickerCPF.resume();
+            });
+            physics.start();
+            
             java.util.Timer timer = new java.util.Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -82,12 +94,6 @@ public class Main {
                     tickerFPS.interval();
                 }
             }, 0L, 1000L);
-            
-            physics = new Physics(bubbles);
-            physics.onTick(() -> {
-                tickerCPF.count();
-            });
-            physics.start();
         });
     }
     
