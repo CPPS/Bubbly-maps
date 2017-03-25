@@ -58,9 +58,9 @@ public class Main {
             origin = new Point(bounds.x, bounds.y + bounds.height);
             tickerCPF = new Ticker(origin, "tick", "delta", "count", "time", "CPF");
             
-            canvas.addLayer(0, environment);
-            canvas.addLayer(2, tickerFPS);
-            canvas.addLayer(2, tickerCPF);
+            canvas.addLayer(1, tickerCPF);
+            canvas.addLayer(1, tickerFPS);
+            canvas.addLayer(2, environment);
             
             window.setContentPane(canvas);
             window.validate();
