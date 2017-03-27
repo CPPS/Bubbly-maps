@@ -9,11 +9,11 @@ public class RadioGroup {
     List<JMenuItem> items = new ArrayList<>();
     ButtonGroup group = new ButtonGroup();
 
-    public void addChoice(int key, String value) {
-        addChoice(key, value, false);
+    public JMenuItem addChoice(int key, String value) {
+        return addChoice(key, value, false);
     }
     
-    public void addChoice(int key, String value, boolean active) {
+    public JMenuItem addChoice(int key, String value, boolean active) {
         JMenuItem item = new JRadioButtonMenuItem(value);
         item.addActionListener((ActionEvent e) -> {
             s.setState(key);
@@ -22,6 +22,7 @@ public class RadioGroup {
         items.add(item);
         
         if (active) item.doClick();
+        return item;
     }
 
     public void addTo(JMenu menu) {
