@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
+import rendering.menuhelpers.RadioGroup;
+import rendering.menuhelpers.RadioGroup.State;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,6 +35,7 @@ public class Main {
     public Environment environment;
     public Ticker tickerFPS;
     public Ticker tickerCPF;
+    public State physicsState;
     
     public void run() {
         bubbles = getRandomBubbles(10);
@@ -80,6 +83,29 @@ public class Main {
             physics.start();
 
             JMenu menu = physics.getMenu();
+            RadioGroup rg = new RadioGroup();
+            rg.addChoice(0, "Continuous", true);
+            rg.addChoice(1, "Once per frame");
+            rg.addChoice(2, "Once per second");
+            rg.addChoice(3, "Single run");
+            rg.addChoice(4, "Idle");
+            rg.addTo(menu);
+            
+            physicsState = rg.getStateObject();
+            physicsState.setListener(i -> {
+                if (i == 0) {
+                    physics.requestResume();
+                } else {
+                    physics.requestPause();
+                    if (i == 3) {
+                        physics.requestSingleRun();
+                        rg.setActive(4);
+                    }
+                }
+            });
+            
+            rg.setActive(0);
+            
             window.getJMenuBar().add(menu);
             
             java.util.Timer timer = new java.util.Timer();
@@ -88,12 +114,16 @@ public class Main {
                 public void run() {
                     tickerFPS.count();
                     tickerCPF.interval();
+                    if (physicsState.getState() == 1) 
+                        physics.requestSingleRun();
                     canvas.repaint();
                 }
             }, 0L, preferredInterval);
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
+                    if (physicsState.getState() == 2)
+                        physics.requestSingleRun();
                     tickerFPS.interval();
                 }
             }, 0L, 1000L);

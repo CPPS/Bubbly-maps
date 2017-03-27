@@ -113,28 +113,6 @@ public class Physics extends Thread {
         if (menu == null) {
             menu = new JMenu("Physics");
             menu.setMnemonic(KeyEvent.VK_P);
-            JMenuItem item;
-
-            item = new JMenuItem("Pause");
-            item.setMnemonic(KeyEvent.VK_P);
-            item.addActionListener((ActionEvent e) -> {
-                requestPause();
-            });
-            menu.add(item);
-
-            item = new JMenuItem("Resume");
-            item.setMnemonic(KeyEvent.VK_R);
-            item.addActionListener((ActionEvent e) -> {
-                requestResume();
-            });
-            menu.add(item);
-
-            item = new JMenuItem("Single run");
-            item.setMnemonic(KeyEvent.VK_O);
-            item.addActionListener((ActionEvent e) -> {
-                requestSingleRun();
-            });
-            menu.add(item);
         }
         return menu;
     }
