@@ -59,7 +59,7 @@ public class Main {
             
             Rectangle bounds = tickerFPS.getDisplayBounds();
             origin = new Point(bounds.x, bounds.y + bounds.height);
-            tickerCPF = new Ticker(origin, "tick", "delta", "count", "time", "CPF");
+            tickerCPF = new Ticker(origin, "tick", "delta", "count", "time", "CPF", true);
             tickerCPF.setResolution(120);
             
             canvas.addLayer(1, tickerCPF);
@@ -80,17 +80,9 @@ public class Main {
             physics.onResume(() -> {
                 tickerCPF.resume();
             });
-            physics.start();
 
             JMenu menu = physics.getMenu();
             RadioGroup rg = new RadioGroup();
-            rg.addChoice(0, "Continuous", true);
-            rg.addChoice(1, "Once per frame");
-            rg.addChoice(2, "Once per second");
-            rg.addChoice(3, "Single run");
-            rg.addChoice(4, "Idle");
-            rg.addTo(menu);
-            
             physicsState = rg.getStateObject();
             physicsState.setListener(i -> {
                 if (i == 0) {
@@ -103,8 +95,13 @@ public class Main {
                     }
                 }
             });
-            
-            rg.setActive(0);
+            rg.addChoice(0, "Continuous");
+            rg.addChoice(1, "Once per frame");
+            rg.addChoice(2, "Once per second");
+            rg.addChoice(3, "Single run");
+            rg.addChoice(4, "Idle", true);
+            rg.addTo(menu);
+            physics.start();
             
             window.getJMenuBar().add(menu);
             

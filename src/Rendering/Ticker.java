@@ -25,8 +25,8 @@ public class Ticker extends JComponent {
     public final int GRAPHWIDTH = 200;
     public final int GRAPHHEIGHT = 80;
     
-    private boolean paused = false;
-    private long timePaused = 0;
+    private boolean paused;
+    private long timePaused;
     
     private long counter = 0;
     private long timeAtStart = 0;
@@ -70,6 +70,10 @@ public class Ticker extends JComponent {
     
     // tick = frame, delta = delta, intv = count, time = time
     public Ticker(Point origin, String tick, String delta, String lintv, String time, String unit) {
+        this(origin, tick, delta, lintv, time, unit, false);
+    }
+    
+    public Ticker(Point origin, String tick, String delta, String lintv, String time, String unit, boolean startPaused) {
         this.origin = origin;
         this.unit = unit;
         table.put("tick", new TableEntry(TICK, tick, () -> {
@@ -101,6 +105,11 @@ public class Ticker extends JComponent {
         intervals.add(0L);
         timeAtStart = System.nanoTime();
         timeLastCounted = timeAtStart;
+        
+        if (startPaused) {
+            timePaused = timeAtStart;
+            paused = true;
+        }
         
 //        setSize(new Dimension(GRAPHWIDTH + MARGIN * 2 + 40, getGraphY(0) + MARGIN));
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
@@ -134,11 +143,13 @@ public class Ticker extends JComponent {
     }
     
     public void pause() {
+        if (paused) return;
         paused = true;
         timePaused = System.nanoTime();
     }
     
     public void resume() {
+        if (!paused) return;
         paused = false;
         long deltaPaused = System.nanoTime() - timePaused;
         
