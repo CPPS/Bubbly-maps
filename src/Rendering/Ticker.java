@@ -248,7 +248,7 @@ public class Ticker extends JComponent {
         g.setColor(Color.BLACK);
         int lastX = -1;
         int lastY = -1;
-        it = intervals.iterator();
+        it = ((Iterable)intervals.clone()).iterator();
         for (int i = 0; it.hasNext(); i++) {
             int pointX = (int)(graph.x + (1 - (intervals.size() - 1 - i) / (double)resolution) * graph.width);
             int pointY = graph.y + getGraphY(it.next());
