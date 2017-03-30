@@ -157,6 +157,10 @@ public class Ticker extends JComponent {
         timeLastCounted += deltaPaused;
     }
     
+    private LinkedList<Long> getIntervals() {
+        return ((LinkedList<Long>)intervals.clone());
+    }
+    
     @Override 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -207,8 +211,9 @@ public class Ticker extends JComponent {
         offsetY += offsetX;
         
         Iterator<Long> it;
+        LinkedList<Long> itvs = getIntervals();
         Rectangle graph = new Rectangle(offsetX, offsetY, GRAPHWIDTH, GRAPHHEIGHT);
-        long maxValue = (long)Math.max(1, intervals.stream().max((a, b) -> (int)(a - b)).orElse(0L));
+        long maxValue = (long)Math.max(1, itvs.stream().max((a, b) -> (int)(a - b)).orElse(0L));
         
         // draw rulers
         g.setColor(Color.LIGHT_GRAY);
@@ -259,9 +264,9 @@ public class Ticker extends JComponent {
         g.setColor(Color.BLACK);
         int lastX = -1;
         int lastY = -1;
-        it = intervals.iterator();
+        it = itvs.iterator();
         for (int i = 0; it.hasNext(); i++) {
-            int pointX = (int)(graph.x + (1 - (intervals.size() - 1 - i) / (double)resolution) * graph.width);
+            int pointX = (int)(graph.x + (1 - (itvs.size() - 1 - i) / (double)resolution) * graph.width);
             int pointY = graph.y + getGraphY(it.next());
             
             if (i > 0) g.drawLine(
@@ -275,8 +280,8 @@ public class Ticker extends JComponent {
     }
     
     private int getGraphY(long value) {
-        long max = (long)Math.max(1, intervals.stream().max((a, b) -> (int)(a - b)).orElse(0L));
-        return (int)((1 - value / (double)max) * GRAPHHEIGHT);  
+        long max = (long)Math.max(1, getIntervals().stream().max((a, b) -> (int)(a - b)).orElse(0L));
+        return (int)((1 - value / (double)max) * GRAPHHEIGHT);
     }
     
     private class TableEntry {
@@ -316,7 +321,7 @@ public class Ticker extends JComponent {
         width = Math.max(width, (int)(MARGIN * 2 + 0.62 * FONTSIZE * (column0Width + column1Width) + PADDING));
         
         int rulerWidth = 0;
-        long maxValue = intervals.stream()
+        long maxValue = getIntervals().stream()
                 .map(x -> ("" + x).length())
                 .max((a, b) -> a - b)
                 .orElse(0);
