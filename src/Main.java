@@ -38,6 +38,14 @@ public class Main {
     public State physicsState;
     
     public void run() {
+        try {
+            UIManager.setLookAndFeel(
+                UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            System.out.println(e.getMessage());
+        }
+        
         bubbles = getRandomBubbles(10);
 //        bubbles = getInputBubbles(System.in);
         
