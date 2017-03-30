@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 public class Physics extends Thread {
     private List<Bubble> bubbles;
@@ -15,6 +18,10 @@ public class Physics extends Thread {
     private boolean shouldStop;
     private boolean shouldPause;
     private int shouldRun;
+    
+    private boolean actRandom = false;
+    private boolean actOnDistance = true;
+    private boolean actOnBubblePhysics = true;
     
     private Runnable onTick;
     private Runnable onStop;
@@ -88,8 +95,16 @@ public class Physics extends Thread {
     }
     
     public void singlePass() {
-        for (int i = 0; i < bubbles.size(); i++)
-            bubbles.get(i).moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1));
+        if (actRandom)
+            bubbles.stream().forEach(b -> b.moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1)));
+        else {
+            if (actOnDistance) {
+                // TODO: add distance metric interactions
+            }
+            if (actOnBubblePhysics) {
+                // TODO: add bubble physics interactions
+            }
+        }
     }
     
     public void onTick(Runnable onTick) {
@@ -113,6 +128,44 @@ public class Physics extends Thread {
         if (menu == null) {
             menu = new JMenu("Physics");
             menu.setMnemonic(KeyEvent.VK_P);
+            ButtonGroup bg = new ButtonGroup();
+            JMenuItem item, itemDM, itemBP;
+            
+            itemDM = new JCheckBoxMenuItem("Distance metric", true);
+            itemDM.setMnemonic(KeyEvent.VK_D);
+            itemDM.addActionListener((ActionEvent e) -> {
+                actOnDistance = !actOnDistance;
+            });
+            
+            itemBP = new JCheckBoxMenuItem("Bubble physics", true);
+            itemBP.setMnemonic(KeyEvent.VK_B);
+            itemBP.addActionListener((ActionEvent e) -> {
+                actOnBubblePhysics = !actOnBubblePhysics;
+            });
+            
+            item = new JRadioButtonMenuItem("Random");
+            item.setMnemonic(KeyEvent.VK_R);
+            item.addActionListener((ActionEvent e) -> {
+                actRandom = true;
+                itemDM.setEnabled(false);
+                itemBP.setEnabled(false);
+            });
+            menu.add(item);
+            bg.add(item);
+            item.doClick();
+            
+            item = new JRadioButtonMenuItem("Deterministic");
+            item.setMnemonic(KeyEvent.VK_D);
+            item.addActionListener((ActionEvent e) -> {
+                actRandom = false;
+                itemDM.setEnabled(true);
+                itemBP.setEnabled(true);
+            });
+            menu.add(item);
+            bg.add(item);
+            
+            menu.add(itemDM);
+            menu.add(itemBP);
         }
         return menu;
     }
