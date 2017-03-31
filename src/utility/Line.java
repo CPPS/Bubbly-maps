@@ -13,8 +13,8 @@ import static java.lang.Math.sqrt;
  * @author Pantea
  */
 public class Line {
-    Point p1;
-    Point p2;
+    public Point p1;
+    public Point p2;
     Vector direction;
     private final double EPS = 0.000001;
     
@@ -28,12 +28,13 @@ public class Line {
         return (sqrt(pow(p1.getX() - p2.getX(), 2) + pow(p1.getY() - p2.getY(), 2)));
     }
     
-    public boolean intersects(Line l){
+    public Pair<Boolean, Point> intersects(Line l){
         double m1 = direction.getY()/direction.getX();
         double m2 = l.direction.getY()/l.direction.getX();
-        if (Math.abs(Math.abs(m1)- Math.abs(m2)) <= EPS)   return false;
-        if(p1.equals(l.p1)|| p1.equals(l.p2)|| p2.equals(l.p1)|| p2.equals(l.p2))
-            return true;
+        if (Math.abs(m1- m2) <= EPS)    return new Pair(false,null);
+        if (p1.equals(l.p1) || p1.equals(l.p2) || 
+            p2.equals(l.p1)|| p2.equals(l.p2)) return new Pair(false, null);
+            
         double b1 = p1.getY() - (m1*p1.getX());
         double b2 = l.p1.getY() - (m2*l.p1.getX());
         double x = (b1-b2)/(m2-m1);
@@ -45,8 +46,8 @@ public class Line {
         double dist4 = intsec.distanceTo(l.p2);
         if ((dist1+dist2) - this.getLength() > EPS ||
             (dist3+dist4) - l.getLength() > EPS){
-            return false;
+            return new Pair(false, null);
         }
-        return true;
+        return new Pair(true, new Point(x,y));
     }
 }

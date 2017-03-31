@@ -69,10 +69,29 @@ public class Graph {
     }
     
     public void fixIntersections(Bubble b1){
+        Pair<Boolean, Point> pair;
         for (Intersection i: b1.intersections){
             for (Intersection in: b1.intersections){
                 if (!i.equals(in)){
-                    i.line.intersects(in.line);
+                    pair = i.line.intersects(in.line);
+                    if (pair.first){
+                        Bubble b;
+                        Point p;
+                        //fix i
+                        b = i.b1.equals(in.b1) ? in.b2 : in.b1;
+                        Point center = b.getPosition();
+                        double dist1 = i.line.p1.distanceTo(center);
+                        double dist2 = i.line.p2.distanceTo(center);
+                        p = (dist1 - dist2) > EPS ? i.line.p1 : i.line.p2; 
+                        i.line = new Line (p,pair.second);
+                        //fix in
+                        b = in.b1.equals(i.b1) ? i.b2 : i.b1;
+                        center = b.getPosition();
+                        dist1 = in.line.p1.distanceTo(center);
+                        dist2 = in.line.p2.distanceTo(center);
+                        p = (dist1 - dist2) > EPS ? in.line.p1 : in.line.p2; 
+                        in.line = new Line (p,pair.second);
+                    }
                 }
             }
         }
