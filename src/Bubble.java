@@ -43,4 +43,10 @@ public class Bubble {
     public void relocateBubble (Point p){
         this.position = p;
     }
+    
+    @Override
+    public boolean equals (Object o){
+        Bubble b = (Bubble) o;
+        return this.position.equals(b.position);
+    }
 }
