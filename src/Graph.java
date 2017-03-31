@@ -8,14 +8,17 @@ import utility.*;
 public class Graph {
     private ArrayList<Bubble> bubbles;
     private final double EPS = 0.000001;
+   
     public Graph (ArrayList bubbles){
      this.bubbles = bubbles;   
+     findIntersections();
     }
  
-    public void  findIntersecions(){
+    public void findIntersections(){
         for (int i=0 ; i < bubbles.size(); i++){
            bubbles.get(i).intersections = bubbleIntersections(i); 
         }
+        for (Bubble b: bubbles) fixIntersections(b);
     }
     
     public ArrayList<Intersection> bubbleIntersections(int b){
@@ -23,11 +26,9 @@ public class Graph {
         Bubble b1,b2;
         b1= bubbles.get(b);
         for (int i=0; i < bubbles.size(); i++){
-            if (i == b){
-                continue;
-            }
+            if (i == b) continue;
             b2 = bubbles.get(i);
-            if (b1.position.distanceTo(b2.position)-(b1.radius+b2.radius) > EPS){
+            if (b1.position.distanceTo(b2.position)-(b1.radius + b2.radius) > EPS){
                 Pair<Point, Point> p = circleIntersections(b1, b2);
                 b1.intersections.add(new Intersection (b1, b2, new Line(p.first, p.second)));
             }
