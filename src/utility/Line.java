@@ -8,19 +8,15 @@ package utility;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
-/**
- *
- * @author Pantea
- */
-public class Line {
+public class Line extends Edge{
     public Point p1;
     public Point p2;
     Vector direction;
     private final double EPS = 0.000001;
     
+    
     public Line (Point point1, Point point2){
-        this.p1 = point1;
-        this.p2 = point2;
+        super(point1, point2);
         direction = new Vector (p2.getX()-p1.getX(), p2.getY()-p1.getY());
     }
     
@@ -28,7 +24,9 @@ public class Line {
         return (sqrt(pow(p1.getX() - p2.getX(), 2) + pow(p1.getY() - p2.getY(), 2)));
     }
     
-    public Pair<Boolean, Point> intersects(Line l){
+    @Override
+    public Pair<Boolean, Point> intersects(Edge e){
+        Line l = (Line) e;
         double m1 = direction.getY()/direction.getX();
         double m2 = l.direction.getY()/l.direction.getX();
         if (Math.abs(m1- m2) <= EPS)    return new Pair(false,null);
@@ -50,4 +48,10 @@ public class Line {
         }
         return new Pair(true, new Point(x,y));
     }
+
+    @Override
+    public double getArea() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

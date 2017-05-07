@@ -1,19 +1,22 @@
 
-import utility.Line;
+import utility.*;
 
 public class Intersection {
 
 Bubble b1, b2;
 Line line;
-//double startR;
-//double endR;
 
     public Intersection(Bubble b1, Bubble b2, Line l){
         this.b1 = b1;
         this.b2 = b2;
         this.line = l;
-//        this.startR = start;
-//        this.endR = end;
+    }
+    
+    @Override
+    public int hashCode(){
+        int a = b1.hashCode()  << 10;
+        int b = b2.hashCode();
+        return a^b;
     }
     
     @Override

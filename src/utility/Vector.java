@@ -8,10 +8,16 @@ public class Vector{
     private double x;
     private double y;
     private final double EPS = 0.000001;
+    
     public Vector(double x, double y) {        
 
         this.x = x;
         this.y = y;
+    }
+    
+    public Vector(Point p1, Point p2) {
+        this.x = p2.getX() - p1.getX();
+        this.y  = p2.getY() - p1.getY();
     }
 
     public double cross(Vector v){
