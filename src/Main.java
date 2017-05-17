@@ -149,7 +149,7 @@ public class Main {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         
         for (int i = 0; i < nr; i++)
-            result.add(new Bubble(screen.width * dbl.next(), screen.height * dbl.next(), 100 * dbl.next(), 200 * dbl.next()));
+            result.add(new Bubble(screen.width * dbl.next(), screen.height * dbl.next(), 100 * dbl.next(), 10000 * dbl.next()));
         
         return result;
     }

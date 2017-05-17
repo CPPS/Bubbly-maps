@@ -129,18 +129,27 @@ public class Physics extends Thread {
                 }
             }
             if (actOnBubblePhysics) {
+                // minimize edges
                 bubbles.forEach((b) -> b.getIntersections().forEach(intersection -> {
-                    Bubble  b1 = intersection.b1,
+                    Bubble b1 = intersection.b1,
                             b2 = intersection.b2;
 
-                    double  distance = intersection.b1.position.distanceTo(intersection.b2.position),
-                            radii2p3 = intersection.b1.radius + intersection.b2.radius * 2/3,
+                    double distance = intersection.b1.position.distanceTo(intersection.b2.position),
+                            radii2p3 = intersection.b1.radius + intersection.b2.radius * 2 / 3,
                             delta = distance - radii2p3;
 
                     Vector diff = b1.position.vectorTo(b2.position).normalize().scale(0.5 * delta).scale(effect);
 
                     b1.setVelocity(b1.getVelocity().plus(diff));
                 }));
+
+                // preserve area;
+                bubbles.forEach((b) -> {
+                    double actualArea = b.bubbleArea();
+                    double preferArea = b.area;
+
+                    b.radius += ((Math.signum(preferArea - actualArea) * Math.sqrt(Math.abs(preferArea - actualArea))) * effect);
+                });
             }
         }
 
