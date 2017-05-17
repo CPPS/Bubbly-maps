@@ -1,6 +1,7 @@
 package core;
 
 import rendering.Environment;
+import utility.Vector;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -100,16 +101,50 @@ public class Physics extends Thread {
     }
     
     public void singlePass() {
+        List<Bubble> bubbles = environment.getGraph().getBubbles();
+
         if (actRandom)
-            environment.getGraph().getBubbles().stream().forEach(b -> b.moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1)));
+            bubbles.stream().forEach(b -> b.setVelocity(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1)));
         else {
+            environment.getGraph().findIntersections();
+            bubbles.forEach((b) -> b.setVelocity(0, 0));
+
+            double effect = 0.001;
+
             if (actOnDistance) {
-                // TODO: add distance metric interactions
+                for (int i = 0; i < bubbles.size(); i++) {
+                    Bubble b1 = bubbles.get(i);
+
+                    for (int j = i + 1; j < bubbles.size(); j++) {
+                        Bubble b2 = bubbles.get(j);
+
+                        double  distance = b1.position.distanceTo(b2.position),
+                                delta = distance - 100; // TODO: set actual distance target
+
+                        Vector diff = b1.getPosition().vectorTo(b2.getPosition()).normalize().scale(0.5 * delta).scale(effect);
+
+                        b1.setVelocity(b1.getVelocity().plus(diff));
+                        b2.setVelocity(b2.getVelocity().plus(diff.scale(-1)));
+                    }
+                }
             }
             if (actOnBubblePhysics) {
-                // TODO: add bubble physics interactions
+                bubbles.forEach((b) -> b.getIntersections().forEach(intersection -> {
+                    Bubble  b1 = intersection.b1,
+                            b2 = intersection.b2;
+
+                    double  distance = intersection.b1.position.distanceTo(intersection.b2.position),
+                            radii2p3 = intersection.b1.radius + intersection.b2.radius * 2/3,
+                            delta = distance - radii2p3;
+
+                    Vector diff = b1.position.vectorTo(b2.position).normalize().scale(0.5 * delta).scale(effect);
+
+                    b1.setVelocity(b1.getVelocity().plus(diff));
+                }));
             }
         }
+
+        bubbles.forEach(b -> b.moveBubble(b.getVelocity()));
     }
     
     public void onTick(Runnable onTick) {
