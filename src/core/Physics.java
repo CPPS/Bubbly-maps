@@ -1,3 +1,5 @@
+package core;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
@@ -127,7 +129,7 @@ public class Physics extends Thread {
     JMenu menu;
     public JMenu getMenu() {
         if (menu == null) {
-            menu = new JMenu("Physics");
+            menu = new JMenu("core.Physics");
             menu.setMnemonic(KeyEvent.VK_P);
             ButtonGroup bg = new ButtonGroup();
             JMenuItem item, itemDM, itemBP;
@@ -138,7 +140,7 @@ public class Physics extends Thread {
                 actOnDistance = !actOnDistance;
             });
             
-            itemBP = new JCheckBoxMenuItem("Bubble physics", true);
+            itemBP = new JCheckBoxMenuItem("core.Bubble physics", true);
             itemBP.setMnemonic(KeyEvent.VK_B);
             itemBP.addActionListener((ActionEvent e) -> {
                 actOnBubblePhysics = !actOnBubblePhysics;

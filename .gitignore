@@ -1,3 +1,8 @@
 nbproject/
+.idea/
 /dist/
 /build/
+
+# IntelliJ
+Bubbly-maps.iml
+out/

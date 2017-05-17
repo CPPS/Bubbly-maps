@@ -1,4 +1,7 @@
 import java.awt.EventQueue;
+
+import core.Bubble;
+import core.Physics;
 import rendering.*;
 import java.awt.Dimension;
 import java.awt.Point;
