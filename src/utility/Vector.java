@@ -40,10 +40,8 @@ public class Vector{
         return new Vector (this.x - v.x, this.y - v.y);
     }
     
-    public void normalize(){
-        double length = this.getLength();
-        this.x /= length;
-        this.y /= length;
+    public Vector normalize(){
+        return this.scale(1/this.getLength());
     }
     
     public double getX(){

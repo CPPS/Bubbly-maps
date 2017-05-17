@@ -1,3 +1,5 @@
+package core;
+
 import java.util.ArrayList;
 import java.util.List;
 import utility.*;
@@ -7,8 +9,8 @@ public class Bubble {
     double radius;
     double area;
     Vector velocity;
-    ArrayList<Intersection> intersections;
-    ArrayList<ArrayList<Edge>> polygons = new ArrayList<ArrayList<Edge>>();
+    List<Intersection> intersections;
+    List<List<Edge>> polygons;
     Util util = new Util();
 
     public Bubble(double x, double y, double radius, double area){
@@ -17,15 +19,24 @@ public class Bubble {
         this.area = area;
         this.velocity = new Vector(0,0);
         this.intersections = new ArrayList<>();
+        this.polygons = new ArrayList<>();
     }
 
 	public Point getPosition (){
 		return this.position;
 	}
 
+	public double getRadius () {
+	    return this.radius;
+    }
+
 	public Vector getVelocity (){
 		return this.velocity;
 	}
+
+	public List<Intersection> getIntersections () {
+	    return this.intersections;
+    }
 
     public void setVelocity (double x, double y){
         this.velocity = new Vector(x, y);
@@ -79,9 +90,9 @@ public class Bubble {
         return util.calcSegmentArea(Math.acos(dot), this.radius) - util.calcPolygonArea(edges);
     }
     
-    double buubbleArea(){
+    double bubbleArea(){
         double area = Math.PI* Math.pow(radius, 2);
-        for (ArrayList p: polygons){
+        for (List p: polygons){
             area -= findLostArea(p);
             for (Object o: p){
                 Edge e = (Edge)o;

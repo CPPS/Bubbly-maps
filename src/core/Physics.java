@@ -1,3 +1,8 @@
+package core;
+
+import rendering.Environment;
+import utility.Vector;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
@@ -13,7 +18,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 
 public class Physics extends Thread {
-    private List<Bubble> bubbles;
+    private Environment environment;
     
     private boolean running;
     private boolean shouldStop;
@@ -29,8 +34,8 @@ public class Physics extends Thread {
     private Runnable onPause;
     private Runnable onResume;
     
-    public Physics(List<Bubble> bubbles) {
-        this.bubbles = bubbles;
+    public Physics(Environment environment) {
+        this.environment = environment;
         
         running = false;
         shouldStop = false;
@@ -96,16 +101,59 @@ public class Physics extends Thread {
     }
     
     public void singlePass() {
+        List<Bubble> bubbles = environment.getGraph().getBubbles();
+
         if (actRandom)
-            bubbles.stream().forEach(b -> b.moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1)));
+            bubbles.stream().forEach(b -> b.setVelocity(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1)));
         else {
+            environment.getGraph().findIntersections();
+            bubbles.forEach((b) -> b.setVelocity(0, 0));
+
+            double effect = 0.001;
+
             if (actOnDistance) {
-                // TODO: add distance metric interactions
+                for (int i = 0; i < bubbles.size(); i++) {
+                    Bubble b1 = bubbles.get(i);
+
+                    for (int j = i + 1; j < bubbles.size(); j++) {
+                        Bubble b2 = bubbles.get(j);
+
+                        double  distance = b1.position.distanceTo(b2.position),
+                                delta = distance - 100; // TODO: set actual distance target
+
+                        Vector diff = b1.getPosition().vectorTo(b2.getPosition()).normalize().scale(0.5 * delta).scale(effect);
+
+                        b1.setVelocity(b1.getVelocity().plus(diff));
+                        b2.setVelocity(b2.getVelocity().plus(diff.scale(-1)));
+                    }
+                }
             }
             if (actOnBubblePhysics) {
-                // TODO: add bubble physics interactions
+                // minimize edges
+                bubbles.forEach((b) -> b.getIntersections().forEach(intersection -> {
+                    Bubble b1 = intersection.b1,
+                            b2 = intersection.b2;
+
+                    double distance = intersection.b1.position.distanceTo(intersection.b2.position),
+                            radii2p3 = intersection.b1.radius + intersection.b2.radius * 2 / 3,
+                            delta = distance - radii2p3;
+
+                    Vector diff = b1.position.vectorTo(b2.position).normalize().scale(0.5 * delta).scale(effect);
+
+                    b1.setVelocity(b1.getVelocity().plus(diff));
+                }));
+
+                // preserve area;
+                bubbles.forEach((b) -> {
+                    double actualArea = b.bubbleArea();
+                    double preferArea = b.area;
+
+                    b.radius += ((Math.signum(preferArea - actualArea) * Math.sqrt(Math.abs(preferArea - actualArea))) * effect);
+                });
             }
         }
+
+        bubbles.forEach(b -> b.moveBubble(b.getVelocity()));
     }
     
     public void onTick(Runnable onTick) {
@@ -127,7 +175,7 @@ public class Physics extends Thread {
     JMenu menu;
     public JMenu getMenu() {
         if (menu == null) {
-            menu = new JMenu("Physics");
+            menu = new JMenu("core.Physics");
             menu.setMnemonic(KeyEvent.VK_P);
             ButtonGroup bg = new ButtonGroup();
             JMenuItem item, itemDM, itemBP;
@@ -138,7 +186,7 @@ public class Physics extends Thread {
                 actOnDistance = !actOnDistance;
             });
             
-            itemBP = new JCheckBoxMenuItem("Bubble physics", true);
+            itemBP = new JCheckBoxMenuItem("core.Bubble physics", true);
             itemBP.setMnemonic(KeyEvent.VK_B);
             itemBP.addActionListener((ActionEvent e) -> {
                 actOnBubblePhysics = !actOnBubblePhysics;

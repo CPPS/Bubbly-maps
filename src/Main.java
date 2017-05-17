@@ -1,4 +1,8 @@
 import java.awt.EventQueue;
+
+import core.Bubble;
+import core.Graph;
+import core.Physics;
 import rendering.*;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -28,10 +32,11 @@ public class Main {
     public Framework framework;
     public JFrame window;
     public Canvas canvas;
-    
+
+    public Graph graph;
     public Physics physics;
     public List<Bubble> bubbles;
-    
+
     public Environment environment;
     public Ticker tickerFPS;
     public Ticker tickerCPF;
@@ -48,6 +53,8 @@ public class Main {
         
         bubbles = getRandomBubbles(10);
 //        bubbles = getInputBubbles(System.in);
+
+        graph = new Graph(bubbles);
         
         long preferredInterval = 
                 preferredFPS > 0 && preferredFPS <= 1000 
@@ -61,7 +68,7 @@ public class Main {
             window.setBounds(30, 30, 1400, 800);
             canvas = new Canvas();
             
-            environment = new Environment(new ArrayList<>(bubbles));
+            environment = new Environment(graph);
             
             Point origin;
             origin = new Point(0, 0);
@@ -80,7 +87,7 @@ public class Main {
             window.validate();
             window.repaint();
             
-            physics = new Physics(bubbles);
+            physics = new Physics(environment);
             physics.onTick(() -> {
                 tickerCPF.count();
             });
@@ -144,7 +151,7 @@ public class Main {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         
         for (int i = 0; i < nr; i++)
-            result.add(new Bubble(screen.width * dbl.next(), screen.height * dbl.next(), 100 * dbl.next(), 200 * dbl.next()));
+            result.add(new Bubble(screen.width * dbl.next(), screen.height * dbl.next(), 100 * dbl.next(), 10000 * dbl.next()));
         
         return result;
     }

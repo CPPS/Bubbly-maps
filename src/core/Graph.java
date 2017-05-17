@@ -1,3 +1,5 @@
+package core;
+
 import static java.lang.Math.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +8,10 @@ import utility.*;
 
 
 public class Graph {
-    private ArrayList<Bubble> bubbles;
+    private List<Bubble> bubbles;
     private final double EPS = 0.000001;
    
-    public Graph (ArrayList bubbles){
+    public Graph (List bubbles){
      this.bubbles = bubbles;   
      findIntersections();
     }
@@ -21,8 +23,8 @@ public class Graph {
         for (Bubble b: bubbles) fixIntersections(b);
     }
     
-    public ArrayList<Intersection> bubbleIntersections(int b){
-        ArrayList<Intersection> result = new ArrayList<>();
+    public List<Intersection> bubbleIntersections(int b){
+        List<Intersection> result = new ArrayList<>();
         Bubble b1,b2;
         b1= bubbles.get(b);
         for (int i=0; i < bubbles.size(); i++){
