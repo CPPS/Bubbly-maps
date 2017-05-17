@@ -25,6 +25,10 @@ public class Bubble {
 		return this.position;
 	}
 
+	public double getRadius () {
+	    return this.radius;
+    }
+
 	public Vector getVelocity (){
 		return this.velocity;
 	}

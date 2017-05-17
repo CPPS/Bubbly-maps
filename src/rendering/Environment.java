@@ -1,13 +1,16 @@
 package rendering;
 
+import core.Bubble;
+import utility.Point;
+
 import java.awt.Color;
 import java.awt.Font;
 import static java.awt.Font.*;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -20,9 +23,9 @@ public class Environment extends JComponent {
     public Point scale;
     public double rotate;
     
-    List<Object> bubbles = new ArrayList<>();
+    List<Bubble> bubbles = new ArrayList<>();
     
-    public Environment(List<Object> bubbles) {
+    public Environment(List<Bubble> bubbles) {
         this.bubbles = bubbles;
         
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
@@ -42,26 +45,14 @@ public class Environment extends JComponent {
         g.setFont(new Font("Courier New", PLAIN, 12));
         g.setColor(Color.BLACK);
         
-        Random r = new Random(0);
+        Iterator<Integer> ids = new Random(0).ints(10000, 99999).iterator();
+
         bubbles.stream().forEach((b) -> {
-            Class c = b.getClass();
-            try { // because Bubble is in default package.
-                Field field;
-                field = c.getDeclaredField("position");
-                field.setAccessible(true);
-                utility.Point pos = (utility.Point)field.get(b);
-                
-                field = c.getDeclaredField("radius");
-                field.setAccessible(true);
-                double rad = (double)field.get(b);
-                
-                String str = "b_" + r.ints(10000, 99999).iterator().next();
-                
-                g.drawArc((int)pos.getX() - (int)rad, (int)pos.getY() - (int)rad, (int)(rad * 2), (int)(rad * 2), 0, 360);
-                g.drawString(str, (int)pos.getX() + 5, (int)pos.getY() - 5);
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-                Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Point pos = b.getPosition();
+            double rad = b.getRadius();
+
+            g.drawArc((int)(pos.getX() - rad), (int)(pos.getY() - rad), (int)(rad * 2), (int)(rad * 2), 0, 360);
+            g.drawString("b_" + ids.next(), (int)pos.getX() + 5, (int)pos.getY() - 5);
         });
     }
 }
