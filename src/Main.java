@@ -57,6 +57,8 @@ public class Main {
         EventQueue.invokeLater(() -> {
             framework = new Framework();
             window = framework.createWindow(true);
+//            window.setSize(1400, 800);
+            window.setBounds(30, 30, 1400, 800);
             canvas = new Canvas();
             
             environment = new Environment(new ArrayList<>(bubbles));
