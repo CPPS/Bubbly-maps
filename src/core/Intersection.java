@@ -4,8 +4,8 @@ import utility.*;
 
 public class Intersection {
 
-Bubble b1, b2;
-Line line;
+    public Bubble b1, b2;
+    public Line line;
 
     public Intersection(Bubble b1, Bubble b2, Line l){
         this.b1 = b1;

@@ -56,6 +56,11 @@ public class Environment extends JComponent {
             Point pos = b.getPosition();
             double rad = b.getRadius();
 
+            b.getIntersections().forEach((i) -> {
+                System.out.println("drawing line");
+                g.drawLine((int)i.line.p1.getX(), (int)i.line.p1.getY(), (int)i.line.p2.getX(), (int)i.line.p2.getY());
+            });
+
             g.drawArc((int)(pos.getX() - rad), (int)(pos.getY() - rad), (int)(rad * 2), (int)(rad * 2), 0, 360);
             g.drawString("b_" + ids.next(), (int)pos.getX() + 5, (int)pos.getY() - 5);
         });

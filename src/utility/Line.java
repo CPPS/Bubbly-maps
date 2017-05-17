@@ -9,8 +9,6 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 public class Line extends Edge{
-    public Point p1;
-    public Point p2;
     Vector direction;
     private final double EPS = 0.000001;
     

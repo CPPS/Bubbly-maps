@@ -34,6 +34,10 @@ public class Bubble {
 		return this.velocity;
 	}
 
+	public List<Intersection> getIntersections () {
+	    return this.intersections;
+    }
+
     public void setVelocity (double x, double y){
         this.velocity = new Vector(x, y);
     }
