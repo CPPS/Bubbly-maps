@@ -1,5 +1,7 @@
 package core;
 
+import rendering.Environment;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
@@ -15,7 +17,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 
 public class Physics extends Thread {
-    private List<Bubble> bubbles;
+    private Environment environment;
     
     private boolean running;
     private boolean shouldStop;
@@ -31,8 +33,8 @@ public class Physics extends Thread {
     private Runnable onPause;
     private Runnable onResume;
     
-    public Physics(List<Bubble> bubbles) {
-        this.bubbles = bubbles;
+    public Physics(Environment environment) {
+        this.environment = environment;
         
         running = false;
         shouldStop = false;
@@ -99,7 +101,7 @@ public class Physics extends Thread {
     
     public void singlePass() {
         if (actRandom)
-            bubbles.stream().forEach(b -> b.moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1)));
+            environment.getGraph().getBubbles().stream().forEach(b -> b.moveBubble(new utility.Vector(dbl.next() * 2 - 1, dbl.next() * 2 - 1)));
         else {
             if (actOnDistance) {
                 // TODO: add distance metric interactions

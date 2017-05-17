@@ -1,6 +1,7 @@
 package rendering;
 
 import core.Bubble;
+import core.Graph;
 import utility.Point;
 
 import java.awt.Color;
@@ -23,10 +24,10 @@ public class Environment extends JComponent {
     public Point scale;
     public double rotate;
     
-    List<Bubble> bubbles = new ArrayList<>();
-    
-    public Environment(List<Bubble> bubbles) {
-        this.bubbles = bubbles;
+    Graph graph;
+
+    public Environment(Graph graph) {
+        this.graph = graph;
         
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -38,6 +39,10 @@ public class Environment extends JComponent {
         setVisible(true);
     }
 
+    public Graph getGraph() {
+        return this.graph;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -47,7 +52,7 @@ public class Environment extends JComponent {
         
         Iterator<Integer> ids = new Random(0).ints(10000, 99999).iterator();
 
-        bubbles.stream().forEach((b) -> {
+        graph.getBubbles().stream().forEach((b) -> {
             Point pos = b.getPosition();
             double rad = b.getRadius();
 
