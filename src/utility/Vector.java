@@ -28,6 +28,10 @@ public class Vector{
         return this.x*v.x + this.y*v.y;
     }
 
+    public double perpDot(Vector v) {
+        return x*v.y - y*v.x;
+    }
+
     public double getLength(){
         return (sqrt(pow(x, 2) + pow(y, 2)));
     }
@@ -41,7 +45,7 @@ public class Vector{
     }
     
     public Vector normalize(){
-        return this.scale(1/this.getLength());
+        return this.scale(1.0/this.getLength());
     }
     
     public double getX(){
