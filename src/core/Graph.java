@@ -34,7 +34,7 @@ public class Graph {
             double d = b1.position.distanceTo(b2.position);
             if (d - (b1.radius + b2.radius) < EPS && d - abs(b1.radius - b2.radius) > EPS){
                 Pair<Point, Point> p = circleIntersections(b1, b2);
-                b1.intersections.add(new Intersection (b1, b2, new Line(p.first, p.second)));
+                result.add(new Intersection (b1, b2, new Line(p.first, p.second)));
             }
         }
         return result;
@@ -73,10 +73,14 @@ public class Graph {
         return new Pair(p1, p2);
     }
     
-    public void fixIntersections(Bubble b1){
+    public void fixIntersections(Bubble bubble){
+        if (bubble.getPosition().getX() == 900 && bubble.getPosition().getY() == 600)
+            Math.abs(1);
         Point intersection;
-        for (Intersection i: b1.intersections){
-            for (Intersection in: b1.intersections){
+        for (int k = 0; k < bubble.intersections.size(); k++ ){
+            Intersection i = bubble.intersections.get(k);
+            for (int z =k+1; z < bubble.intersections.size(); z++){
+                Intersection in = bubble.intersections.get(z);
                 if (i.equals(in)) continue;
                 intersection = i.line.intersects(in.line);
                 if (intersection != null){
@@ -85,17 +89,21 @@ public class Graph {
                     //fix i
                     b = i.b1.equals(in.b1) ? in.b2 : in.b1;
                     Point center = b.getPosition();
-                    double dist1 = i.line.p1.distanceTo(center);
-                    double dist2 = i.line.p2.distanceTo(center);
-                    p = (dist1 - dist2) > EPS ? i.line.p1 : i.line.p2; 
-                    i.line = new Line (p,intersection);
+                    Line l = new Line (bubble.position, i.line.p1);
+                    if (l.intersects(in.line) != null){
+                        i.line = new Line(i.line.p2, intersection);
+                    }
+                    else {
+                        i.line = new Line(i.line.p1, intersection);
+                    }
                     //fix in
-                    b = in.b1.equals(i.b1) ? i.b2 : i.b1;
-                    center = b.getPosition();
-                    dist1 = in.line.p1.distanceTo(center);
-                    dist2 = in.line.p2.distanceTo(center);
-                    p = (dist1 - dist2) > EPS ? in.line.p1 : in.line.p2; 
-                    in.line = new Line (p,intersection);
+                    l = new Line (bubble.position, in.line.p1);
+                    if (l.intersects(in.line) != null){
+                        in.line = new Line(in.line.p2, intersection);
+                    }
+                    else {
+                        in.line = new Line(in.line.p1, intersection);
+                    }
                 } 
             }
         }

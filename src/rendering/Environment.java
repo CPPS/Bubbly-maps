@@ -59,7 +59,9 @@ public class Environment extends JComponent {
 
             // concurrent modification because render loop is separate and may conflict with physics loop
             // TODO: fix concurrency between renderer and physics.
-            for (Intersection i : b.getIntersections()) {
+            List<Intersection> kevin = b.getIntersections();
+            for (int j = 0; j < kevin.size(); j++) {
+                Intersection i = kevin.get(j);
                 System.out.println("drawing line");
                 g.drawLine((int) i.line.p1.getX(), (int) i.line.p1.getY(), (int) i.line.p2.getX(), (int) i.line.p2.getY());
             }

@@ -119,7 +119,7 @@ public class Physics extends Thread {
                         Bubble b2 = bubbles.get(j);
 
                         double  distance = b1.position.distanceTo(b2.position),
-                                delta = distance - 100; // TODO: set actual distance target
+                                delta = distance - 150; // TODO: set actual distance target
 
                         Vector diff = b1.getPosition().vectorTo(b2.getPosition()).normalize().scale(0.5 * delta).scale(effect);
 
