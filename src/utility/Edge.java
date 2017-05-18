@@ -13,6 +13,6 @@ public abstract class Edge {
         this.p2 = p2;
     }
     
-    public abstract Pair<Boolean, Point> intersects(Edge e);
+    public abstract  Point intersects(Edge e);
     public abstract double getArea();
 }

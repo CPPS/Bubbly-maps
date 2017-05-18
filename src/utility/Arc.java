@@ -1,18 +1,6 @@
 package utility;
-
-
 import utility.Point;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Pantea
- */
 public class Arc extends Edge{
     Point p1, p2, c;
     double angle, radius;
@@ -34,9 +22,9 @@ public class Arc extends Edge{
 
 
     @Override
-    public Pair<Boolean, Point> intersects(Edge e) {
+    public  Point intersects(Edge e) {
         Arc a = (Arc) e;
-        return new Pair (false, null);
+        return null;
     }
 
     @Override

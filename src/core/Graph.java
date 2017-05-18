@@ -10,6 +10,7 @@ import utility.*;
 public class Graph {
     private List<Bubble> bubbles;
     private final double EPS = 0.000001;
+    
    
     public Graph (List bubbles){
      this.bubbles = bubbles;   
@@ -30,7 +31,8 @@ public class Graph {
         for (int i=0; i < bubbles.size(); i++){
             if (i == b) continue;
             b2 = bubbles.get(i);
-            if (b1.position.distanceTo(b2.position)-(b1.radius + b2.radius) > EPS){
+            double d = b1.position.distanceTo(b2.position);
+            if (d - (b1.radius + b2.radius) < EPS && d - abs(b1.radius - b2.radius) > EPS){
                 Pair<Point, Point> p = circleIntersections(b1, b2);
                 b1.intersections.add(new Intersection (b1, b2, new Line(p.first, p.second)));
             }
@@ -55,10 +57,10 @@ public class Graph {
         
         double d = c1.distanceTo(c2);
         double a = pow(r1,2) - pow(r2,2) + pow(d,2);
-        a /= 2d;
+        a /= (2*d);
         double h = sqrt(pow(r1,2) - pow(a,2));
         Vector ab = new Vector (c2.getX() - c1.getX(), c2.getY() - c1.getY());
-        ab.normalize();
+        ab = ab.normalize();
         Vector v = new Vector(-ab.getY(), ab.getX());
         v = v.scale(h);
         ab = ab.scale(a);
@@ -72,12 +74,12 @@ public class Graph {
     }
     
     public void fixIntersections(Bubble b1){
-        Pair<Boolean, Point> pair;
+        Point intersection;
         for (Intersection i: b1.intersections){
             for (Intersection in: b1.intersections){
                 if (i.equals(in)) continue;
-                pair = i.line.intersects(in.line);
-                if (pair.first){
+                intersection = i.line.intersects(in.line);
+                if (intersection != null){
                     Bubble b;
                     Point p;
                     //fix i
@@ -86,14 +88,14 @@ public class Graph {
                     double dist1 = i.line.p1.distanceTo(center);
                     double dist2 = i.line.p2.distanceTo(center);
                     p = (dist1 - dist2) > EPS ? i.line.p1 : i.line.p2; 
-                    i.line = new Line (p,pair.second);
+                    i.line = new Line (p,intersection);
                     //fix in
                     b = in.b1.equals(i.b1) ? i.b2 : i.b1;
                     center = b.getPosition();
                     dist1 = in.line.p1.distanceTo(center);
                     dist2 = in.line.p2.distanceTo(center);
                     p = (dist1 - dist2) > EPS ? in.line.p1 : in.line.p2; 
-                    in.line = new Line (p,pair.second);
+                    in.line = new Line (p,intersection);
                 } 
             }
         }

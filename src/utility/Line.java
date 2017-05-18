@@ -23,13 +23,13 @@ public class Line extends Edge{
     }
     
     @Override
-    public Pair<Boolean, Point> intersects(Edge e){
+    public  Point intersects(Edge e){
         Line l = (Line) e;
         double m1 = direction.getY()/direction.getX();
         double m2 = l.direction.getY()/l.direction.getX();
-        if (Math.abs(m1- m2) <= EPS)    return new Pair(false,null);
+        if (Math.abs(m1- m2) <= EPS)    return null;
         if (p1.equals(l.p1) || p1.equals(l.p2) || 
-            p2.equals(l.p1)|| p2.equals(l.p2)) return new Pair(false, null);
+            p2.equals(l.p1)|| p2.equals(l.p2)) return null;
             
         double b1 = p1.getY() - (m1*p1.getX());
         double b2 = l.p1.getY() - (m2*l.p1.getX());
@@ -42,9 +42,9 @@ public class Line extends Edge{
         double dist4 = intsec.distanceTo(l.p2);
         if ((dist1+dist2) - this.getLength() > EPS ||
             (dist3+dist4) - l.getLength() > EPS){
-            return new Pair(false, null);
+            return null;
         }
-        return new Pair(true, new Point(x,y));
+        return new Point(x,y);
     }
 
     @Override
