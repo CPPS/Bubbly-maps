@@ -149,11 +149,11 @@ public class Main {
         Random r = new Random(0);
         Iterator<Double> dbl = r.doubles().iterator();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        result.add(new Bubble(900, 600, 120, 45240));
-        result.add(new Bubble(-Math.sqrt(3)/2*100 + 900, -50+500, 120, 45240));
-        result.add(new Bubble(Math.sqrt(3)/2*100 + 900,  -50 + 500, 120, 45240));
-//        for (int i = 0; i < nr; i++)
-//            result.add(new Bubble(screen.width * dbl.next(), screen.height * dbl.next(), 100 * dbl.next(), 10000 * dbl.next()));
+//        result.add(new Bubble(900, 600, 120, 45240));
+//        result.add(new Bubble(-Math.sqrt(3)/2*100 + 900, -50+500, 120, 45240));
+//        result.add(new Bubble(Math.sqrt(3)/2*100 + 900,  -50 + 500, 120, 45240));
+        for (int i = 0; i < nr; i++)
+            result.add(new Bubble(screen.width * dbl.next(), screen.height * dbl.next(), 100 * dbl.next(), 10000 * dbl.next()*2));
         
         return result;
     }

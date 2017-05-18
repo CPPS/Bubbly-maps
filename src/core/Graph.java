@@ -21,7 +21,14 @@ public class Graph {
         for (int i=0 ; i < bubbles.size(); i++){
            bubbles.get(i).intersections = bubbleIntersections(i); 
         }
-        for (Bubble b: bubbles) fixIntersections(b);
+        for (int i=0 ; i < bubbles.size(); i++){
+            if (i != 0){
+                Math.abs(1);
+            }
+            fixIntersections(bubbles.get(i));
+        }
+
+//        fixIntersections(bubbles.get(2));
     }
     
     public List<Intersection> bubbleIntersections(int b){
@@ -74,37 +81,53 @@ public class Graph {
     }
     
     public void fixIntersections(Bubble bubble){
-        if (bubble.getPosition().getX() == 900 && bubble.getPosition().getY() == 600)
-            Math.abs(1);
         Point intersection;
         for (int k = 0; k < bubble.intersections.size(); k++ ){
             Intersection i = bubble.intersections.get(k);
             for (int z =k+1; z < bubble.intersections.size(); z++){
                 Intersection in = bubble.intersections.get(z);
-                if (i.equals(in)) continue;
                 intersection = i.line.intersects(in.line);
-                if (intersection != null){
+                if (intersection != null || true){
                     Bubble b;
                     Point p;
                     //fix i
-                    b = i.b1.equals(in.b1) ? in.b2 : in.b1;
-                    Point center = b.getPosition();
+                    b = i.b1.equals(bubble) ? in.b2 : in.b1;
                     Line l = new Line (bubble.position, i.line.p1);
-                    if (l.intersects(in.line) != null){
-                        i.line = new Line(i.line.p2, intersection);
+                    Line ll = new Line (bubble.position, i.line.p2);
+                    Point dummy1, dummy2;
+                    dummy1 = l.intersects(in.line);
+                    dummy2 = ll.intersects(in.line);
+                    if ( dummy1!= null && dummy2!= null){
+                        bubble.intersections.remove(k--);
                     }
                     else {
-                        i.line = new Line(i.line.p1, intersection);
+                        if (intersection != null) {
+                            if (dummy2 != null) {
+                                i.line = new Line(i.line.p1, intersection);
+                            } else {
+                                i.line = new Line(i.line.p2, intersection);
+                            }
+                        }
                     }
                     //fix in
+                    b = in.b1.equals(bubble) ? i.b2 : i.b1;
                     l = new Line (bubble.position, in.line.p1);
-                    if (l.intersects(in.line) != null){
-                        in.line = new Line(in.line.p2, intersection);
+                    ll = new Line (bubble.position, in.line.p2);
+                    dummy1 = l.intersects(i.line);
+                    dummy2 = ll.intersects(i.line);
+                    if (dummy1 != null && dummy2 != null){
+                        bubble.intersections.remove(z--);
                     }
                     else {
-                        in.line = new Line(in.line.p1, intersection);
+                        if (intersection != null) {
+                            if (dummy2 != null){
+                                in.line = new Line(in.line.p1, intersection);
+                            } else {
+                                in.line = new Line(in.line.p2, intersection);
+                            }
+                        }
                     }
-                } 
+                }
             }
         }
     }
