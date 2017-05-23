@@ -17,25 +17,20 @@ public class Graph {
      findIntersections();
     }
  
-    public void findIntersections(){
-        for (int i=0 ; i < bubbles.size(); i++){
+    public void findIntersections() {
+        for (int i = 0 ; i < bubbles.size(); i++) {
            bubbles.get(i).intersections = bubbleIntersections(i); 
         }
-        for (int i=0 ; i < bubbles.size(); i++){
-            if (i != 0){
-                Math.abs(1);
-            }
+        for (int i = 0 ; i < bubbles.size(); i++) {
             fixIntersections(bubbles.get(i));
         }
-
-//        fixIntersections(bubbles.get(2));
     }
     
-    public List<Intersection> bubbleIntersections(int b){
+    public List<Intersection> bubbleIntersections(int b) {
         List<Intersection> result = new ArrayList<>();
         Bubble b1,b2;
         b1= bubbles.get(b);
-        for (int i=0; i < bubbles.size(); i++){
+        for (int i = 0; i < bubbles.size(); i++) {
             if (i == b) continue;
             b2 = bubbles.get(i);
             double d = b1.position.distanceTo(b2.position);
@@ -47,10 +42,10 @@ public class Graph {
         return result;
     }
     
-    public Pair<Point, Point> circleIntersections(Bubble b1, Bubble b2){
+    public Pair<Point, Point> circleIntersections(Bubble b1, Bubble b2) {
         Point p1,p2,c1,c2;
         double r1, r2;
-        if(b1.radius > b2.radius){
+        if (b1.radius > b2.radius) {
             r1 = b1.radius;
             c1 = b1.position;
             r2 = b2.radius;
@@ -80,14 +75,14 @@ public class Graph {
         return new Pair(p1, p2);
     }
     
-    public void fixIntersections(Bubble bubble){
+    public void fixIntersections(Bubble bubble) {
         Point intersection;
-        for (int k = 0; k < bubble.intersections.size(); k++ ){
+        for (int k = 0; k < bubble.intersections.size(); k++) {
             Intersection i = bubble.intersections.get(k);
-            for (int z =k+1; z < bubble.intersections.size(); z++){
+            for (int z =k + 1; z < bubble.intersections.size(); z++) {
                 Intersection in = bubble.intersections.get(z);
                 intersection = i.line.intersects(in.line);
-                if (intersection != null || true){
+                if (intersection != null || true) {
                     Bubble b;
                     Point p;
                     //fix i
@@ -97,7 +92,7 @@ public class Graph {
                     Point dummy1, dummy2;
                     dummy1 = l.intersects(in.line);
                     dummy2 = ll.intersects(in.line);
-                    if ( dummy1!= null && dummy2!= null){
+                    if ( dummy1!= null && dummy2!= null) {
                         bubble.intersections.remove(k--);
                     }
                     else {
@@ -115,12 +110,12 @@ public class Graph {
                     ll = new Line (bubble.position, in.line.p2);
                     dummy1 = l.intersects(i.line);
                     dummy2 = ll.intersects(i.line);
-                    if (dummy1 != null && dummy2 != null){
+                    if (dummy1 != null && dummy2 != null) {
                         bubble.intersections.remove(z--);
                     }
                     else {
                         if (intersection != null) {
-                            if (dummy2 != null){
+                            if (dummy2 != null) {
                                 in.line = new Line(in.line.p1, intersection);
                             } else {
                                 in.line = new Line(in.line.p2, intersection);

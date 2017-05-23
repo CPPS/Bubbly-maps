@@ -13,7 +13,7 @@ public class Line extends Edge{
     private final double EPS = 0.000001;
     
     
-    public Line (Point point1, Point point2){
+    public Line(Point point1, Point point2){
         super(point1, point2);
         direction = new Vector (p2.getX()-p1.getX(), p2.getY()-p1.getY());
     }

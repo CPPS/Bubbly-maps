@@ -36,15 +36,15 @@ public class Vector{
         return (sqrt(pow(x, 2) + pow(y, 2)));
     }
 
-    public Vector plus (Vector v){
+    public Vector plus(Vector v){
         return new Vector (this.x + v.x , this.y+ v.y);
     }
 
-    public Vector minus (Vector v){
+    public Vector minus(Vector v){
         return new Vector (this.x - v.x, this.y - v.y);
     }
     
-    public Vector normalize(){
+    public Vector normalize() {
         return this.scale(1.0/this.getLength());
     }
 
@@ -76,16 +76,16 @@ public class Vector{
     }
     
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         Vector v = (Vector)o;
         return (Math.abs(v.getX()-this.x) <= EPS) && (Math.abs(v.getY()-this.y)<= EPS);
     }
 
-    public Vector scale (double x){
+    public Vector scale(double x){
             return scale(x, x);
     }
 
-    public Vector scale (double x, double y){
+    public Vector scale(double x, double y){
             return new Vector (this.x * x, this.y * y);
     }
 }

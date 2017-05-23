@@ -15,17 +15,17 @@ public class Point {
     private double x;
     private double y;
     private final double EPS = 0.000001;
-    public Point(double x, double y){
+    public Point(double x, double y) {
         this.x = x;
         this.y = y;
     }
     
-    public Point plus (Vector v){
-        return new Point (this.x + v.getX() , this.y+ v.getY());
+    public Point plus(Vector v){
+        return new Point(this.x + v.getX() , this.y+ v.getY());
     }
     
-    public Point minus (Vector v){
-        return new Point (this.x - v.getX(), this.y - v.getY());
+    public Point minus(Vector v){
+        return new Point(this.x - v.getX(), this.y - v.getY());
     }
     
     public Vector toVector(){
@@ -44,7 +44,7 @@ public class Point {
         return this.y;
     }
     
-    public double distanceTo (Point p){
+    public double distanceTo(Point p){
         return (sqrt(pow(x - p.getX(), 2) + pow(y - p.y, 2)));
     }
 

@@ -12,7 +12,7 @@ public class Bubble {
     List<Intersection> intersections;
     List<List<Edge>> polygons;
 
-    public Bubble(double x, double y, double radius, double area){
+    public Bubble(double x, double y, double radius, double area) {
         this.position = new Point(x, y);
         this.radius = radius;
         this.area = area;
@@ -21,44 +21,44 @@ public class Bubble {
         this.polygons = new ArrayList<>();
     }
 
-	public Point getPosition (){
+	public Point getPosition(){
 		return this.position;
 	}
 
-	public double getRadius () {
+	public double getRadius() {
 	    return this.radius;
     }
 
-	public Vector getVelocity (){
+	public Vector getVelocity(){
 		return this.velocity;
 	}
 
-	public List<Intersection> getIntersections () {
+	public List<Intersection> getIntersections() {
 	    return this.intersections;
     }
 
-    public void setVelocity (double x, double y){
+    public void setVelocity(double x, double y){
         this.velocity = new Vector(x, y);
     }
 
-	public void setVelocity (Vector vel){
+	public void setVelocity(Vector vel){
 		this.velocity = vel;
 	}
 
-    public void moveBubble (Vector v){
+    public void moveBubble(Vector v){
         this.position = this.position.plus(v);
     }
 
-    public void relocateBubble (Point p){
+    public void relocateBubble(Point p){
         this.position = p;
     }
     @Override
     public int hashCode(){
-        return (int)(this.position.getX()*7 + this.position.getY()*19);
+        return (int)(this.position.getX() * 7 + this.position.getY() * 19);
     }
     
     @Override
-    public boolean equals (Object o){
+    public boolean equals(Object o) {
         if (o instanceof Bubble) {
             Bubble b = (Bubble) o;
             return this == b;
