@@ -28,8 +28,8 @@ public class Point {
         return new Point (this.x - v.getX(), this.y - v.getY());
     }
     
-    public Vector makeVector (Point p){
-        return new Vector (p.x - this.x, p.y - this.y);
+    public Vector toVector(){
+        return new Vector(this.x, this.y);
     }
     
     public Vector vectorTo(Point p){
@@ -47,6 +47,11 @@ public class Point {
     public double distanceTo (Point p){
         return (sqrt(pow(x - p.getX(), 2) + pow(y - p.y, 2)));
     }
+
+    public double determinant(Point p) {
+        return x*p.y - y*p.x;
+    }
+
     @Override
     public boolean equals(Object o){
         Point p = (Point)o;

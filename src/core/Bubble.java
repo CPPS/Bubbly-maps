@@ -11,7 +11,6 @@ public class Bubble {
     Vector velocity;
     List<Intersection> intersections;
     List<List<Edge>> polygons;
-    Util util = new Util();
 
     public Bubble(double x, double y, double radius, double area){
         this.position = new Point(x, y);
@@ -60,45 +59,67 @@ public class Bubble {
     
     @Override
     public boolean equals (Object o){
-        Bubble b = (Bubble) o;
-        return this.position.equals(b.position);
+        if (o instanceof Bubble) {
+            Bubble b = (Bubble) o;
+            return this == b;
+        }
+        return false;
     }
-    
-    double findLostArea (List<Edge> edges){
-        Point first, last;
-        if (edges.size() == 1){
-            first = edges.get(0).p1;
-            last = edges.get(0).p2;
-        } else {
-            int size = edges.size();
-            if (edges.get(0).p1.equals(edges.get(1).p1) || edges.get(0).p1.equals(edges.get(1).p2)){
-                first = edges.get(0).p2;
-            } else {
-                first = edges.get(0).p1;
+
+    public double bubbleArea() {
+        double area = Math.PI * Math.pow(radius, 2);
+
+        for (int i = 0; i < polygons.size(); i++) {
+            List<Edge> polygon = polygons.get(i);
+
+            // calculating polygon area
+            double cum = 0;
+            Edge prev = polygon.get(0);
+            Point first = null, second = null, last = null;
+            for (int j = 0; j < polygon.size(); j++) {
+                Edge next = polygon.get(j + 1 % polygon.size());
+                Point   pp1 = prev.p1,
+                        pp2 = prev.p2,
+                        np1 = next.p1;
+
+                // finding common point
+                Point common;                       // fixing missing data
+                if (pp1 == np1) {common = pp1;      if (j == 0) {last = pp2; first = pp2; second = pp1;}}
+                else            {common = pp2;      if (j == 0) {last = pp1; first = pp1; second = pp2;}}
+
+                cum += last.determinant(common);
+                last = common;
             }
-            if (edges.get(size - 1).p1.equals(edges.get(size - 2).p1) || edges.get(size - 1).p1.equals(edges.get(size - 2).p2)){
-                last = edges.get(size).p2;
+
+            // check whether the polygon is whole
+            if (last != first) {
+                // finish the polygon if not
+                cum += last.determinant(first);
+
+                // calculating segment area
+                double angle = position.vectorTo(first).angleBetween(position.vectorTo(last)),
+                        rr = Math.pow(radius, 2),
+                        areaCircle = Math.PI * rr,
+                        areaSegment = 0.5 * rr * (angle - Math.sin(angle));
+
+                // see what side of the circle should be discarded;
+                boolean angleGreaterThan180Deg =
+                        first.vectorTo(last).sameSide(first, second, position);
+
+                // discard the correct bit
+                area -= angleGreaterThan180Deg
+                        ? areaCircle - areaSegment
+                        : areaSegment;
+
+                // then add the area of the polygon
+                area += 0.5 * Math.abs(cum);
             } else {
-                last = edges.get(0).p1;
+                // if the polygon is whole, it must be the entire bubble area
+                area = 0.5 * Math.abs(cum);
+                break;
             }
         }
-        Vector v1 = new Vector(this.position, edges.get(0).p1);
-        Vector v2 = new Vector(this.position, edges.get(0).p2);
-        double dot = v1.dot(v2);
-        dot /= v1.getLength();
-        dot /= v2.getLength();
-        return util.calcSegmentArea(Math.acos(dot), this.radius) - util.calcPolygonArea(edges);
-    }
-    
-    double bubbleArea(){
-        double area = Math.PI* Math.pow(radius, 2);
-        for (List p: polygons){
-            area -= findLostArea(p);
-            for (Object o: p){
-                Edge e = (Edge)o;
-                area += e.getArea();
-            }
-        }
+
         return area;
     }
 }
