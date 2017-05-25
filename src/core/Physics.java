@@ -135,8 +135,10 @@ public class Physics extends Thread {
                             b2 = intersection.b2;
 
                     double distance = intersection.b1.position.distanceTo(intersection.b2.position),
-                            radii2p3 = intersection.b1.radius + intersection.b2.radius * 2 / 3,
-                            delta = distance - radii2p3;
+                            r1 = intersection.b1.radius,
+                            r2 = intersection.b2.radius,
+                            loc = Math.sqrt(r1*r1 + r1*r2 + r2*r2),
+                            delta = distance - loc;
 
                     Vector diff = b1.position.vectorTo(b2.position).normalize().scale(0.5 * delta).scale(effect);
 
